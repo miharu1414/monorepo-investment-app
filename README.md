@@ -63,9 +63,14 @@ cd monorepo-investment-app
 2. 環境変数の設定:
    - frontend/.env.localとbackend/.envを作成（テンプレートからコピー）
 
-3. 開発環境の起動:
+3. 開発環境の初回 起動時:
 ```bash
 docker-compose up --build
+```
+
+2回目以降の起動時:
+```bash
+docker-compose up 
 ```
 
 ### 開発ワークフロー
