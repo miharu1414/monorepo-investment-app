@@ -1,6 +1,8 @@
 import graphene
 from ...infrastructure.repositories.user_repository_impl import SQLAlchemyUserRepository
 from ...domain.models.user import User
+from .auth_schema import LoginMutation, RegisterMutation
+from .todo_schema import Query as TodoQuery, Mutation as TodoMutation
 
 class UserType(graphene.ObjectType):
     id = graphene.ID(required=True)
@@ -8,7 +10,7 @@ class UserType(graphene.ObjectType):
     email = graphene.String(required=True)
     created_at = graphene.DateTime()
 
-class Query(graphene.ObjectType):
+class Query(graphene.ObjectType, TodoQuery):
     users = graphene.List(UserType)
     user = graphene.Field(UserType, id=graphene.Int(required=True))
 
@@ -36,7 +38,9 @@ class CreateUser(graphene.Mutation):
         created_user = repository.save(user)
         return CreateUser(user=created_user)
 
-class Mutation(graphene.ObjectType):
+class Mutation(graphene.ObjectType, TodoMutation):
     create_user = CreateUser.Field()
+    login = LoginMutation.Field()
+    register = RegisterMutation.Field()
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
